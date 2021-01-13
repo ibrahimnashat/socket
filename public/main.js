@@ -18,7 +18,7 @@ $(function() {
   
     // Prompt for setting a username
     var username;
-    var connected = false;
+    var connected = true;
     var typing = false;
     var lastTypingTime;
     var $currentInput = $usernameInput.focus();
@@ -36,9 +36,15 @@ $(function() {
       log(message);
     }
   
+  	$('#pop').on('click',function(){
+		  socket.emit('send image');
+		  alert('dasdasd');
+	});
+	
+	
     // Sets the client's username
     const setUsername = () => {
-      username = cleanInput($usernameInput.val().trim());
+      username = {apiToken: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC90ZXN0bXNob29yLnJvd2FkZWxhYmRhMy5uZXRcL3B1YmxpY1wvYXBpXC9sb2dpbiIsImlhdCI6MTYxMDM3MDY2OCwiZXhwIjoxNjM2MjkwNjY4LCJuYmYiOjE2MTAzNzA2NjgsImp0aSI6InBFMTFrNEd4eXBRM1ppU0QiLCJzdWIiOjExMCwicHJ2IjoiMjNiZDVjODk0OWY2MDBhZGIzOWU3MDFjNDAwODcyZGI3YTU5NzZmNyJ9.1jduZonP1fxfoimp0Ni0lqCWRbdJP0ap51mRMHmIThY',image: 'sdasdadadasdasdasdad',username: 'pop',type: '1'};
   
       // If the username is valid
       if (username) {
@@ -48,7 +54,7 @@ $(function() {
         $currentInput = $inputMessage.focus();
   
         // Tell the server your username
-        socket.emit('add user', username);
+        socket.emit('addUser', username);
       }
     }
   
@@ -227,16 +233,6 @@ $(function() {
   
     // Socket events
   
-    // Whenever the server emits 'login', log the login message
-    socket.on('login', (data) => {
-      connected = true;
-      // Display the welcome message
-      var message = "Welcome to Socket.IO Chat – ";
-      log(message, {
-        prepend: true
-      });
-      addParticipantsMessage(data);
-    });
   
     // Whenever the server emits 'new message', update the chat body
     socket.on('new message', (data) => {
@@ -248,6 +244,16 @@ $(function() {
       log(data.username + ' joined');
       addParticipantsMessage(data);
     });
+
+        // Whenever the server emits 'user joined', log it in the chat body
+        socket.on('add image', (data) => {
+          alert(data);
+        });
+
+                // Whenever the server emits 'user joined', log it in the chat body
+                socket.on('image', (data) => {
+                  alert(data);
+                });
   
     // Whenever the server emits 'user left', log it in the chat body
     socket.on('user left', (data) => {
